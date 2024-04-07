@@ -93,7 +93,7 @@ services:
         condition: on-failure
 
   odds-predictor:
-    image: gdmurray/odds-predictor:latest
+    image: gdmurray/mma-oracle-odds-predictor:latest
     ports:
       - "5555:5555"
     networks:

@@ -33,8 +33,8 @@ jobs:
       - name: Build and push Docker image
         run: |
           cd ${{ matrix.app }}
-          docker build -t mma-oracle/${{ matrix.app }}:latest .
-          docker push mma-oracle/${{ matrix.app }}:latest
+          docker build -t gdmurray/mma-oracle-${{ matrix.app }}:latest .
+          docker push gdmurray/mma-oracle-${{ matrix.app }}:latest
   deploy:
     needs: build-and-push
     runs-on: ubuntu-latest
