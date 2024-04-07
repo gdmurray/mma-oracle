@@ -4,7 +4,8 @@ services:
     env_file:
       - .env
     ports:
-      - "5432:5432"
+      - published: 5432
+        target: 5432
     volumes:
       - postgres_data_container:/var/lib/postgresql/data
     networks:
@@ -22,7 +23,8 @@ services:
     env_file:
       - .env
     ports:
-      - "27017:27017"
+      - published: 27017
+        target: 27017
     volumes:
       - mongodb_data_container:/data/db
     networks:
@@ -42,7 +44,8 @@ services:
     env_file:
       - .env
     ports:
-      - "8081:8081"
+      - published: 8081
+        target: 8081
     networks:
       - default
       - backend
@@ -58,7 +61,8 @@ services:
     env_file:
       - .env
     ports:
-      - "3000:3000"
+      - published: 3000
+        target: 3000
     depends_on:
       - mongodb
     networks:
@@ -79,7 +83,8 @@ services:
     env_file:
       - .env
     ports:
-      - "4000:4000"
+      - published: 4000
+        target: 4000
     networks:
       - default
       - backend
@@ -95,7 +100,8 @@ services:
   odds-predictor:
     image: gdmurray/mma-oracle-odds-predictor:latest
     ports:
-      - "5555:5555"
+      - published: 5555
+        target: 5555
     networks:
       - backend
     deploy:
