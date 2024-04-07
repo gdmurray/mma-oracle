@@ -40,11 +40,16 @@ sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin d
 sudo yum install -y git
 sudo yum install -y nginx
 
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.26.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose --version
 
 # Create application folder
 mkdir mma-oracle
 cd mma-oracle
 git init
+eval "$(ssh-agent -s)"
+ssh-add - <<< "${{ secrets.DEPLOY_KEY }}"
 git remote add origin [origin repo]
 
 # Create SSH

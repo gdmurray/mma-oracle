@@ -47,7 +47,7 @@ jobs:
           host: "${{ secrets.SSH_HOST }}"
           username: "app"
           passphrase: "${{ secrets.SSH_PASSPHRASE }}"
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key: "${{ secrets.SSH_PRIVATE_KEY }}"
           script: |
             echo "Creating .env file..."
             
@@ -68,9 +68,6 @@ jobs:
             echo ".env file created with secrets."
             
             cd ~/mma-oracle
-            
-            eval "$(ssh-agent -s)"
-            ssh-add - <<< "${{ secrets.DEPLOY_KEY }}"
             git pull origin main
             
             # Pull the latest images
