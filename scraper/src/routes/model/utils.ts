@@ -5,7 +5,8 @@ import type {ParsedAthleteFullEventLog} from "../../services/athleteEventLog/par
 import type {ParsedCompetitionDetail} from "../../services/competition/parser";
 import type {ParsedCompetitionStatus} from "../../services/competitionStatus/parser";
 import type {ParsedCompetitionOddsData} from "../../services/competitionOdds/parser";
-import * as puppeteer from "puppeteer";
+
+const puppeteer = require("puppeteer");
 
 export function getESPNOdds(competition: ParsedCompetitionDetail) {
     const {odds} = competition as { odds: ParsedCompetitionOddsData }

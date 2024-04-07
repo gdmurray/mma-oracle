@@ -1,7 +1,9 @@
 {
   "scripts": {
     "watch-ts": "tsc --watch",
-    "dev": "bun run --watch dist/index.js"
+    "dev": "bun run --watch dist/index.js",
+    "build": "bun build ./src/index.ts --outdir ./build --target bun",
+    "start": "bun run build/index.js"
   },
   "dependencies": {
     "agenda": "^5.0.0",
@@ -26,9 +28,7 @@
     "@types/mime": "^4.0.0",
     "@types/mongoose": "^5.11.97",
     "@types/morgan": "^1.9.9",
-    "@types/node": "^20.12.2",
-    "ts-jest": "^29.1.2",
-    "vitest": "^1.4.0"
+    "ts-jest": "^29.1.2"
   },
   "name": "scraper",
   "module": "src/index.ts",

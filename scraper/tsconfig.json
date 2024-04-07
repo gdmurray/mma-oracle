@@ -7,12 +7,10 @@
       "ESNext"
     ],
     "types": [
-      "node",
-      "bun",
+      "bun-types",
       "express",
       "zod",
       "mongoose",
-      "vitest/globals",
     ],
     "outDir": "./dist",
     "target": "ESNext",
