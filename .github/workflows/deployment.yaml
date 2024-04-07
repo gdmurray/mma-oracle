@@ -71,7 +71,7 @@ jobs:
             cd ~/mma-oracle
             
             eval "$(ssh-agent -s)"
-            ssh-add -l
+            ssh-add ~/.ssh/mma-oracle-github-deploy-key
             git pull origin main
             
             # Pull the latest images
