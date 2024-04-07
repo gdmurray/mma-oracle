@@ -21,7 +21,6 @@ services:
 
   mongodb:
     image: mongo:latest
-    container_name: mongodb
     env_file:
       - .env
     ports:
@@ -42,9 +41,6 @@ services:
 
   mongo-express:
     image: mongo-express:latest
-    container_name: mongo-express
-    depends_on:
-      - mongodb
     env_file:
       - .env
     ports:
@@ -71,8 +67,6 @@ services:
         target: 3000
         protocol: tcp
         mode: ingress
-    depends_on:
-      - mongodb
     networks:
       - backend
     deploy:
@@ -86,8 +80,6 @@ services:
 
   backend:
     image: gdmurray/mma-oracle-backend:latest
-    depends_on:
-      - postgres
     env_file:
       - .env
     ports:

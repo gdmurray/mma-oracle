@@ -79,4 +79,4 @@ jobs:
             
             # Interpolate .env file and deploy the stack
             # The <(...) syntax creates a temporary file from the output of docker-compose config which docker stack deploy can use
-            docker stack deploy -c <(docker-compose -f docker-compose.prod.yml config) mmaoracle
+            docker stack deploy -c <(docker-compose -f docker-compose.prod.yml config | sed -E 's/published: "([0-9]+)"/published: \1/' | sed '/^name: mma-oracle/d') mmaoracle
