@@ -23,6 +23,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -32,11 +35,15 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker image
-        run: |
-          cd ${{ matrix.app }}
-          docker build --platform linux/arm64 -t gdmurray/mma-oracle-${{ matrix.app }}:latest .
-          docker push gdmurray/mma-oracle-${{ matrix.app }}:latest
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: gdmurray/mma-oracle-${{ matrix.app }}:latest
+          platforms: linux/arm64
+          file: ./${{ matrix.app }}/Dockerfile
+          context: .
+          progress: plain
 
   deploy:
     needs: build-and-push
