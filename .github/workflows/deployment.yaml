@@ -37,7 +37,7 @@ jobs:
       - name: Build and push Docker image
         run: |
           cd ${{ matrix.app }}
-          docker build -t gdmurray/mma-oracle-${{ matrix.app }}:latest .
+          docker build --platform linux/arm64 -t gdmurray/mma-oracle-${{ matrix.app }}:latest .
           docker push gdmurray/mma-oracle-${{ matrix.app }}:latest
 
   deploy:
