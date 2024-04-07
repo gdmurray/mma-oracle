@@ -44,9 +44,9 @@ jobs:
       - name: Execute SSH commands
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: app
-          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          host: "${{ secrets.SSH_HOST }}"
+          username: "app"
+          passphrase: "${{ secrets.SSH_PASSPHRASE }}"
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             echo "Creating .env file..."
