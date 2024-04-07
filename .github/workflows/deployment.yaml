@@ -5,6 +5,7 @@ on:
     branches:
       - main
     paths:
+      - 'docker-compose.prod.yml'
       - '.github/workflows/**'
       - 'backend/**'
       - 'odds-predictor/**'
@@ -68,6 +69,9 @@ jobs:
             echo ".env file created with secrets."
             
             cd ~/mma-oracle
+            
+            eval "$(ssh-agent -s)"
+            ssh-add -l
             git pull origin main
             
             # Pull the latest images
