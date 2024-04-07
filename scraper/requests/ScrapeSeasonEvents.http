@@ -1,0 +1,2 @@
+http://localhost:3000/model/seasons/scrape?season=2023&dates=20230701-20231231&limit=50
+Content-Type: application/json

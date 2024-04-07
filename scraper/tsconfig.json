@@ -1,0 +1,52 @@
+{
+  "compilerOptions": {
+    // Enable latest features
+    "pretty": true,
+    "sourceMap": true,
+    "lib": [
+      "ESNext"
+    ],
+    "types": [
+      "node",
+      "bun",
+      "express",
+      "zod",
+      "mongoose",
+      "vitest/globals",
+    ],
+    "outDir": "./dist",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleDetection": "force",
+    "jsx": "react-jsx",
+    "allowJs": true,
+    // Bundler mode
+    "moduleResolution": "bundler",
+    //    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": false,
+    "noEmit": false,
+    // Best practices
+    "strict": false,
+    "skipLibCheck": true,
+    "noFallthroughCasesInSwitch": true,
+    // Some stricter flags
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "esModuleInterop": true,
+    "baseUrl": "./src",
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "ignoreDeprecations": "5.0",
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

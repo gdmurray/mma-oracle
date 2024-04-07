@@ -1,0 +1,2 @@
+GET http://localhost:3000/experimental/scrapePastEvents
+Content-Type: application/json

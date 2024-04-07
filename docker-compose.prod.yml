@@ -1,0 +1,116 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_container:/var/lib/postgresql/data
+    networks:
+      - backend
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+      restart_policy:
+        condition: on-failure
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    env_file:
+      - .env
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data_container:/data/db
+    networks:
+      - backend
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+      restart_policy:
+        condition: on-failure
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    depends_on:
+      - mongodb
+    env_file:
+      - .env
+    ports:
+      - "8081:8081"
+    networks:
+      - default
+      - backend
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+      restart_policy:
+        condition: on-failure
+
+  scraper:
+    image: gdmurray/mma-oracle-scraper:latest
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    networks:
+      - backend
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  backend:
+    image: gdmurray/mma-oracle-backend:latest
+    depends_on:
+      - db
+    env_file:
+      - .env
+    ports:
+      - "4000:4000"
+    networks:
+      - default
+      - backend
+    deploy:
+      replicas: 1
+      update_config:
+        order: start-first
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+  odds-predictor:
+    image: gdmurray/odds-predictor:latest
+    ports:
+      - "5555:5555"
+    networks:
+      - backend
+    deploy:
+      replicas: 1 # Default is 1, adjust based on your scaling needs
+      update_config:
+        order: start-first
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  mongodb_data_container:
+  postgres_data_container:
+
+networks:
+  default:
+  backend:

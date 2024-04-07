@@ -1,0 +1,2 @@
+GET http://localhost:3000/events/600041994/competitions/401647483
+Content-Type: application/json

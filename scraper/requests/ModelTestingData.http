@@ -1,0 +1,2 @@
+GET http://localhost:3000/model/data/testing
+Content-Type: application/json

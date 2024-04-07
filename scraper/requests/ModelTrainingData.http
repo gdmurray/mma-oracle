@@ -1,0 +1,2 @@
+GET http://localhost:3000/model/data/training
+Content-Type: application/json

@@ -1,0 +1,22 @@
+feature_names
+F1 ML
+F2 ML
+F1 MTHD W
+F2 MTHD L
+F1 Mom
+F2 Mom
+F1 S1
+F2 S1
+F1 S2
+F2 S2
+F1 Age
+F2 Age
+F1 H
+F2 H
+F Weight
+Label_FighterOneByDecision
+Label_FighterOneBySubmission
+Label_FighterOneByTKO
+Label_FighterTwoByDecision
+Label_FighterTwoBySubmission
+Label_FighterTwoByTKO
