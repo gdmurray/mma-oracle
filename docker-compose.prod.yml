@@ -6,6 +6,8 @@ services:
     ports:
       - published: 5432
         target: 5432
+        protocol: tcp
+        mode: host
     volumes:
       - postgres_data_container:/var/lib/postgresql/data
     networks:
@@ -25,6 +27,8 @@ services:
     ports:
       - published: 27017
         target: 27017
+        protocol: tcp
+        mode: host
     volumes:
       - mongodb_data_container:/data/db
     networks:
@@ -46,6 +50,8 @@ services:
     ports:
       - published: 8081
         target: 8081
+        protocol: tcp
+        mode: ingress
     networks:
       - default
       - backend
@@ -63,6 +69,8 @@ services:
     ports:
       - published: 3000
         target: 3000
+        protocol: tcp
+        mode: ingress
     depends_on:
       - mongodb
     networks:
@@ -85,6 +93,8 @@ services:
     ports:
       - published: 4000
         target: 4000
+        protocol: tcp
+        mode: ingress
     networks:
       - default
       - backend
@@ -102,6 +112,8 @@ services:
     ports:
       - published: 5555
         target: 5555
+        protocol: tcp
+        mode: ingress
     networks:
       - backend
     deploy:
