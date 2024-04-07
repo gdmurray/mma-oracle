@@ -15,6 +15,25 @@ su - app
 sudo yum update -y
 sudo yum install -y yum-utils
 
+# Install Snapd https://oracle-base.com/articles/linux/letsencrypt-free-certificates-on-oracle-linux
+sudo dnf install -y oracle-epel-release-el8
+## OR ##
+cd /tmp
+wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+rpm -Uvh /tmp/epel-release-latest-8.noarch.rpm
+
+sudo dnf install certbot python3-certbot-nginx
+
+#
+sudo dnf install -y snapd
+sudo systemctl enable --now snapd.socket
+sudo systemctl start snapd
+sudo ln -s /var/lib/snapd/snap /snap
+
+#
+sudo snap install core
+sudo snap refresh core
+
 # Add Docker Registry
 sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 sudo yum install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
