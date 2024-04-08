@@ -12,12 +12,19 @@ import morgan from 'morgan';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
+if(isProduction){
+    console.log("Running Node Backend in Production Mode", isProduction);
+}else{
+    console.log("Running Node Backend in Development Mode", isProduction);
+}
+
 if (!isProduction) {
     dotenv.config();
 }
 
 function getMongoUrl(): string {
     const mongoUrl = process.env["MONGODB_URL"];
+    console.log("Mongurl, env: ", mongoUrl, isProduction);
     if (mongoUrl == null && isProduction) {
         if (isProduction) {
             const mongoVars = {
