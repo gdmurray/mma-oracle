@@ -11,10 +11,10 @@ RUN #mix archive.install github hexpm/hex branch latest
 RUN mix local.hex --force
 
 # Install the latest Phoenix
-RUN mix archive.install hex phx_new  --force
+RUN mix archive.install hex phx_new  # --force
 
 # Install rebar
-RUN mix local.rebar --force
+RUN mix local.rebar # --force
 
 # Copy the app contents into the container at /app
 COPY ./ /app
