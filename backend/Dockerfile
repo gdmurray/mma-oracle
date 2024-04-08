@@ -1,5 +1,5 @@
 # Use an official Elixir runtime as a parent image
-FROM elixir:otp-25-alpine
+FROM elixir:1.16-otp-26-alpine
 
 # Set the working directory in the container
 WORKDIR /app
