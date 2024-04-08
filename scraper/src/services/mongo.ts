@@ -42,7 +42,7 @@ function getMongoUrl(): string {
             user = encodeURIComponent(user);
             password = encodeURIComponent(password);
             name = encodeURIComponent(name);
-            return `${connection}://${user}:${password}@${host}:${port}/${name}?authSource=admin`;
+            return `${connection}://${user}:${password}@${host}:${port}/${name}?authSource=${name}`;
         }
         console.error("MONGODB_URL is not defined");
         process.exit(1);

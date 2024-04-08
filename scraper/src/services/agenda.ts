@@ -2,7 +2,7 @@ import Agenda from "agenda";
 import {EventService} from "./event/service";
 import {CompetitionService} from "./competition/service";
 import {CompetitionStatusService} from "./competitionStatus/service";
-import {mongoUrl} from "../env";
+import {mongoUrl} from "./mongo";
 
 export const agenda = new Agenda({db: {address: mongoUrl}});
 

@@ -1,12 +1,12 @@
 import express, {NextFunction, Request, Response} from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import {CalendarService} from "./services/calendar/service";
+import morgan from 'morgan';
 import eventsRouter from "./routes/events";
 import modelRouter from "./routes/model/router";
 import {agenda} from "./services/agenda";
-import morgan from 'morgan';
-import {mongoUrl} from "./env";
+import {mongoUrl} from "./services/mongo";
+import {CalendarService} from "./services/calendar/service";
 
 console.log("Starting Application!");
 
