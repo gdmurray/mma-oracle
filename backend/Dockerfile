@@ -4,11 +4,11 @@ FROM elixir:latest
 # Set the working directory in the container
 WORKDIR /app
 
-# Install hex package manager
-RUN mix local.hex --force
-
 # Fix bug https://github.com/erlang/otp/issues/8238
 RUN mix archive.install github hexpm/hex branch latest
+
+# Install hex package manager
+RUN mix local.hex --force
 
 # Install the latest Phoenix
 RUN mix archive.install hex phx_new  # --force
