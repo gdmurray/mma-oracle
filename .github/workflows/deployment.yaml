@@ -35,6 +35,13 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Cache Python dependencies
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: ${{ runner.os }}-buildx-
+
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
         with:
@@ -42,7 +49,15 @@ jobs:
           tags: gdmurray/mma-oracle-${{ matrix.app }}:latest
           platforms: linux/arm64
           context: ${{ matrix.app }}
-          progress: plain
+          build-args: BUILDKIT_INLINE_CACHE=1
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache-new
+        id: docker_build
+
+      - name: Move Docker cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
   deploy:
     needs: build-and-push

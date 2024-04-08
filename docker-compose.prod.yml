@@ -32,6 +32,9 @@ services:
       - mongodb_data_container:/data/db
     networks:
       - backend
+    configs:
+      - source: init_mongo_script
+        target: /docker-entrypoint-initdb.d/init-mongo.js
     deploy:
       replicas: 1
       update_config:
@@ -118,6 +121,10 @@ services:
         delay: 10s
       restart_policy:
         condition: on-failure
+
+configs:
+  init_mongo_script:
+    file: ./scraper/init-mongo.js
 
 volumes:
   mongodb_data_container:

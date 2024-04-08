@@ -1,6 +1,7 @@
 # Use an official Elixir runtime as a parent image
 FROM elixir:latest
 
+ENV ERL_FLAGS="+JPperf true"
 # Set the working directory in the container
 WORKDIR /app
 
@@ -11,7 +12,7 @@ WORKDIR /app
 RUN mix local.hex --force
 
 # Install the latest Phoenix
-RUN mix archive.install hex phx_new  # --force
+RUN mix archive.install hex phx_new  --force
 
 # Install rebar
 RUN mix local.rebar --force
