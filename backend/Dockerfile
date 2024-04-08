@@ -1,6 +1,6 @@
 # Use an official Elixir runtime as a parent image
 FROM hexpm/elixir:1.16.2-erlang-26.2.3-ubuntu-noble-20240225
-RUN sudo apt install git-all
+RUN apt install git-all
 # Set the working directory in the container
 WORKDIR /app
 
