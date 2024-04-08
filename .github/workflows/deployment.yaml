@@ -71,6 +71,7 @@ jobs:
             POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
             POSTGRES_USER=${{ secrets.POSTGRES_USER }}
             NODE_ENV=production
+            FLASK_ENV=production
             EOF
             
             echo ".env file created with secrets."

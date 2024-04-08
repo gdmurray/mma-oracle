@@ -2,7 +2,7 @@ services:
   postgres:
     image: postgres:latest
     env_file:
-      - .env.development
+      - .env
     ports:
       - published: 5432
         target: 5432
@@ -22,7 +22,7 @@ services:
   mongodb:
     image: mongo:latest
     env_file:
-      - .env.development
+      - .env
     ports:
       - published: 27017
         target: 27017
@@ -42,7 +42,7 @@ services:
   mongo-express:
     image: mongo-express:latest
     env_file:
-      - .env.development
+      - .env
     ports:
       - published: 8081
         target: 8081
@@ -61,7 +61,7 @@ services:
   scraper:
     image: gdmurray/mma-oracle-scraper:latest
     env_file:
-      - .env.development
+      - .env
     ports:
       - published: 3000
         target: 3000
@@ -81,7 +81,7 @@ services:
   backend:
     image: gdmurray/mma-oracle-backend:latest
     env_file:
-      - .env.development
+      - .env
     ports:
       - published: 4000
         target: 4000
@@ -108,6 +108,8 @@ services:
         mode: ingress
     networks:
       - backend
+    env_file:
+      - .env
     deploy:
       replicas: 1 # Default is 1, adjust based on your scaling needs
       update_config:
