@@ -5,7 +5,7 @@ FROM elixir:1.16.2-otp-25-alpine
 WORKDIR /app
 
 # Fix bug https://github.com/erlang/otp/issues/8238
-RUN mix archive.install github hexpm/hex branch latest
+RUN #mix archive.install github hexpm/hex branch latest
 
 # Install hex package manager
 RUN mix local.hex --force
