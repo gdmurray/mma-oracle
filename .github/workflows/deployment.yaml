@@ -41,9 +41,14 @@ jobs:
           push: true
           tags: gdmurray/mma-oracle-${{ matrix.app }}:latest
           platforms: linux/arm64
-          file: ./${{ matrix.app }}/Dockerfile
-          context: .
+          context: ${{ matrix.app }}
           progress: plain
+
+      - name: Build and push Docker image
+        run: |
+          cd ${{ matrix.app }}
+          docker build --platform linux/arm64 -t gdmurray/mma-oracle-${{ matrix.app }}:latest .
+          docker push gdmurray/mma-oracle-${{ matrix.app }}:latest
 
   deploy:
     needs: build-and-push
