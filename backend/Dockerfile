@@ -6,7 +6,7 @@ ENV ERL_FLAGS="+JPperf true"
 WORKDIR /app
 
 # Fix bug https://github.com/erlang/otp/issues/8238
-#RUN mix archive.install github hexpm/hex branch latest
+RUN mix archive.install github hexpm/hex branch latest
 
 # Install hex package manager
 RUN mix local.hex --force
