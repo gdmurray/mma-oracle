@@ -2,7 +2,7 @@ services:
   postgres:
     image: postgres:latest
     env_file:
-      - .env
+      - .env.development
     ports:
       - published: 5432
         target: 5432
@@ -22,7 +22,7 @@ services:
   mongodb:
     image: mongo:latest
     env_file:
-      - .env
+      - .env.development
     ports:
       - published: 27017
         target: 27017
@@ -42,7 +42,7 @@ services:
   mongo-express:
     image: mongo-express:latest
     env_file:
-      - .env
+      - .env.development
     ports:
       - published: 8081
         target: 8081
@@ -61,7 +61,7 @@ services:
   scraper:
     image: gdmurray/mma-oracle-scraper:latest
     env_file:
-      - .env
+      - .env.development
     ports:
       - published: 3000
         target: 3000
@@ -70,10 +70,10 @@ services:
     networks:
       - backend
     deploy:
-      replicas: 1
+      replicas: 2
       update_config:
         order: start-first
-        parallelism: 1
+        parallelism: 2
         delay: 10s
       restart_policy:
         condition: on-failure
@@ -81,7 +81,7 @@ services:
   backend:
     image: gdmurray/mma-oracle-backend:latest
     env_file:
-      - .env
+      - .env.development
     ports:
       - published: 4000
         target: 4000

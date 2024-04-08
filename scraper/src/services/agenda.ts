@@ -2,12 +2,7 @@ import Agenda from "agenda";
 import {EventService} from "./event/service";
 import {CompetitionService} from "./competition/service";
 import {CompetitionStatusService} from "./competitionStatus/service";
-
-const mongoUrl = process.env['MONGODB_URL'];
-if (mongoUrl == null) {
-    console.error('MONGODB_URL is not defined');
-    process.exit(1);
-}
+import {mongoUrl} from "../env";
 
 export const agenda = new Agenda({db: {address: mongoUrl}});
 

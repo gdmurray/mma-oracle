@@ -3,7 +3,7 @@
 # IDE
 .idea/
 
-.env
-**/*.env
+.env.development
+**/*.env*
 
 **/.DS_Store
