@@ -7,7 +7,7 @@ on:
     paths:
       - 'docker-compose.prod.yml'
       - '.github/workflows/**'
-#      - 'backend/**'
+      - 'backend/**'
       - 'odds-predictor/**'
       - 'scraper/**'
 jobs:
@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         app:
-          - backend
+#          - backend
           - odds-predictor
           - scraper
     steps:
