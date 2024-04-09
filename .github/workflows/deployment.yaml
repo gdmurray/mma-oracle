@@ -73,11 +73,12 @@ jobs:
           key: "${{ secrets.SSH_PRIVATE_KEY }}"
           script: |
             echo "Creating .env file..."
-            
+            MONGO_URI=""
             # Create or overwrite an existing .env file with the environment variables
             cat > ~/mma-oracle/.env << EOF
             ME_CONFIG_BASICAUTH_PASSWORD=${{ secrets.ME_CONFIG_BASICAUTH_PASSWORD }}
             ME_CONFIG_BASICAUTH_USERNAME=${{ secrets.ME_CONFIG_BASICAUTH_USERNAME }}
+            ME_CONFIG_MONGODB_URL="mongodb://${{ secrets.MONGO_INITDB_ROOT_USERNAME }}:${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}@mongodb:27017/?authSource=admin"
             MONGODB_NAME=${{ secrets.MONGODB_NAME }}
             MONGODB_PASSWORD=${{ secrets.MONGODB_PASSWORD }}
             MONGODB_USER=${{ secrets.MONGODB_USER }}
