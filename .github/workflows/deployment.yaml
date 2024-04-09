@@ -17,6 +17,7 @@ jobs:
       matrix:
         app:
 #          - backend
+          - backup
           - odds-predictor
           - scraper
     steps:

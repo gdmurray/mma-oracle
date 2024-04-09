@@ -123,11 +123,16 @@ services:
         condition: on-failure
 
   backup:
-    build:
-      context: ./backup
-      dockerfile: Dockerfile
+    image: gdmurray/mma-oracle-backup:latest
     env_file:
       - .env
+    ports:
+      - published: 2222
+        target: 22
+        protocol: tcp
+        mode: host
+    networks:
+      - backend
     deploy:
       replicas: 1
       placement:
