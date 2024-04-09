@@ -122,6 +122,18 @@ services:
       restart_policy:
         condition: on-failure
 
+  backup:
+    build:
+      context: ./backup
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+
 configs:
   init_mongo_script:
     file: ./scraper/init-mongo.js
