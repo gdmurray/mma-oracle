@@ -1,5 +1,17 @@
 # Database Restoration Guide
 
+Connect to Backup container within docker-stack
+
+```bash
+docker ps
+```
+
+Once you get container id
+
+```bash
+docker exec -it <container_name_or_id> /bin/bash
+```
+
 ## MongoDB Restore
 
 Download the Backup from Cloudflare R2:
