@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Variables
 BUCKET=$S3_BUCKET
@@ -7,9 +7,9 @@ BACKUP_NAME="postgres_backup_$(date +%Y-%m-%d_%H-%M-%S).sql.gz"
 # PostgreSQL environment variables
 PGHOST="postgres"
 PGPORT="5432"
-PGDATABASE="${POSTGRES_DB}"  # Database name from your environment variables
+export PGDATABASE="${POSTGRES_DB}"  # Database name from your environment variables
 PGUSER="${POSTGRES_USER}"  # Username from your environment variables
-PGPASSWORD="${POSTGRES_PASSWORD}"  # Password from your environment variables
+export PGPASSWORD="${POSTGRES_PASSWORD}"  # Password from your environment variables
 
 # Perform the backup
 pg_dumpall -h "${PGHOST}" -p "${PGPORT}" -U "${PGUSER}" | gzip > "${BACKUP_NAME}"
