@@ -61,25 +61,25 @@ services:
       restart_policy:
         condition: on-failure
 
-#  scraper:
-#    image: gdmurray/mma-oracle-scraper:latest
-#    env_file:
-#      - .env
-#    ports:
-#      - published: 3000
-#        target: 3000
-#        protocol: tcp
-#        mode: ingress
-#    networks:
-#      - backend
-#    deploy:
-#      replicas: 2
-#      update_config:
-#        order: start-first
-#        parallelism: 2
-#        delay: 10s
-#      restart_policy:
-#        condition: on-failure
+  scraper:
+    image: gdmurray/mma-oracle-scraper:latest
+    env_file:
+      - .env
+    ports:
+      - published: 3000
+        target: 3000
+        protocol: tcp
+        mode: ingress
+    networks:
+      - backend
+    deploy:
+      replicas: 2
+      update_config:
+        order: start-first
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
 
   backend:
     image: gdmurray/mma-oracle-backend:latest
