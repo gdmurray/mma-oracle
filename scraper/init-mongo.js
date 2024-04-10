@@ -11,7 +11,7 @@ db = db.getSiblingDB("mmaoracledb")
 const result = db.createUser({
     user: process.env["MONGODB_USER"],
     pwd: process.env["MONGODB_PASSWORD"],
-    roles: [{roles: ['readWrite'], db: process.env["MONGODB_NAME"]}],
+    roles: [{role: 'readWrite', db: process.env["MONGODB_NAME"]}],
 })
 
 // console.log("RESULT: ", result);
