@@ -84,6 +84,7 @@ jobs:
             MONGODB_NAME=${{ secrets.MONGODB_NAME }}
             MONGODB_PASSWORD=${{ secrets.MONGODB_PASSWORD }}
             MONGODB_USER=${{ secrets.MONGODB_USER }}
+            MONGO_INITDB_DATABASE=${{ secrets.MONGODB_NAME }}
             MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}
             MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_INITDB_ROOT_USERNAME }}
             POSTGRES_DB=${{ secrets.POSTGRES_DB }}

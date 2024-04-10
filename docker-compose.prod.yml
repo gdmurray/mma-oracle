@@ -34,7 +34,7 @@ services:
       - backend
     configs:
       - source: init_mongo_script
-        target: /docker-entrypoint-initdb.d/00-init-mongo.js
+        target: /docker-entrypoint-initdb.d/00-init-mongo.js:ro
     deploy:
       replicas: 1
       update_config:
