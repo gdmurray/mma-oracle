@@ -16,7 +16,7 @@ MONGO_URI="mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_HOST}:${MONGO_PORT}/?au
 mongodump --uri="${MONGO_URI}" --archive="$BACKUP_NAME" --gzip
 
 # Upload to Cloudflare R2
-aws s3 cp "$BACKUP_NAME" s3://"$BUCKET"/mongodb/"$BACKUP_NAME" --endpoint-url="${S3_ENDPOINT}"
+aws s3 cp "$BACKUP_NAME" s3://"$BUCKET"/mongodb/"$BACKUP_NAME" --endpoint-url="${S3_ENDPOINT}" --region wnam
 
 # Cleanup
 rm "$BACKUP_NAME"

@@ -15,7 +15,7 @@ export PGPASSWORD="${POSTGRES_PASSWORD}"  # Password from your environment varia
 pg_dumpall -h "${PGHOST}" -p "${PGPORT}" -U "${PGUSER}" | gzip > "${BACKUP_NAME}"
 
 # Upload to Cloudflare R2
-aws s3 cp "$BACKUP_NAME" s3://"$BUCKET"/postgres/"$BACKUP_NAME" --endpoint-url="${S3_ENDPOINT}"
+aws s3 cp "$BACKUP_NAME" s3://"$BUCKET"/postgres/"$BACKUP_NAME" --endpoint-url="${S3_ENDPOINT}" --region wnam
 
 # Cleanup
 rm "$BACKUP_NAME"

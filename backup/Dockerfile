@@ -21,7 +21,7 @@ RUN echo "0 */6 * * * /backup_mongo.sh" >> /etc/crontabs/root
 
 # (Optional) Set default AWS region via environment variable
 # It's better to pass AWS credentials at runtime for security
-ENV AWS_DEFAULT_REGION=us-west-2
+ENV AWS_DEFAULT_REGION=wnam
 ENV S3_BUCKET=mma-oracle
 
 # Run cron in foreground
