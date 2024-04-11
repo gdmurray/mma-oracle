@@ -1,4 +1,4 @@
-import {model, Schema} from "mongoose";
+import mongoose, {model, Schema} from "mongoose";
 
 const CompetitionStatusDataSchema = new Schema({
     $ref: {type: String, required: true},
@@ -35,4 +35,4 @@ const CompetitionStatusSchema = new Schema({
     lastFetched: {type: Date, required: true}
 })
 
-export const CompetitionStatusModel = model('CompetitionStatus', CompetitionStatusSchema)
+export const CompetitionStatusModel = mongoose.models["CompetitionStatus"] || model('CompetitionStatus', CompetitionStatusSchema)

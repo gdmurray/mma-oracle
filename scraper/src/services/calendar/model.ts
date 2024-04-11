@@ -1,5 +1,4 @@
-// import {Schema, model, InferSchemaType} from "mongoose";
-import {Schema, model} from "mongoose";
+import mongoose, {Schema, model} from "mongoose";
 
 
 const calendarEventDataSchema = new Schema({
@@ -20,4 +19,4 @@ export const calendarEventsSchema = new Schema({
 
 // export type CalendarEventsSchema = InferSchemaType<typeof calendarEventsSchema>;
 
-export const CalendarEventModel = model('CalendarEvent', calendarEventsSchema)
+export const CalendarEventModel = mongoose.models["CalendarEvent"] || model('CalendarEvent', calendarEventsSchema)

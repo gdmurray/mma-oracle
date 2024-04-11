@@ -1,4 +1,4 @@
-import {Schema, model} from "mongoose";
+import mongoose, {Schema, model} from "mongoose";
 
 export const AthleteEventSchema = new Schema({
     event: {
@@ -21,4 +21,4 @@ export const AthleteEventLogSchema = new Schema({
     lastFetched: {type: Date, required: true},
 })
 
-export const AthleteEventLogModel = model("AthleteEventLog", AthleteEventLogSchema);
+export const AthleteEventLogModel = mongoose.models["AthleteEventLog"] || model("AthleteEventLog", AthleteEventLogSchema);

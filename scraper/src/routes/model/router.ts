@@ -19,6 +19,9 @@ import {EventDetailModel} from "../../services/event/model";
 import {EventOddsModel} from "../../odds/model";
 import {ParsedEventDetail} from "../../services/event/parser";
 import {CompetitionService} from "../../services/competition/service";
+import {ParsedCompetitionStatus} from "../../services/competitionStatus/parser";
+import {simulateRanks} from "../../ranked/simulation";
+
 
 export const modelRouter = Router();
 
@@ -197,6 +200,8 @@ modelRouter.get("/data/training", async (_req, res) => {
         }
     }).lean();
 
+    // TODO: Fix?
+    // @ts-ignore
     const events = eventsResult.map(elem => elem.data) as ParsedEventDetail[];
     console.log("Found ", events.length, " Events:");
     events.forEach((elem, index) => {
@@ -423,5 +428,94 @@ modelRouter.get("/odds/scrape", async (_req, res) => {
     return res.status(200).json({message: "Scraped"})
 })
 
+// type Outcome = {
+//     method: "Decision" | "TKO" | "Submission",
+//     round: number | null,
+// }
+modelRouter.get("/outcomes", async (req, res) => {
+    const queryString = "?" + req.url.split("?").pop()
+    const response = await apiClient.fetch(`https://sports.core.api.espn.com/v2/sports/mma/leagues/ufc/events${queryString}`);
+    const eventsList = await response.json();
+    const {items} = eventsList as { items: { $ref: string }[] };
+    const filteredEvents = (await Promise.all(items.map(elem => {
+        const eventsService = new EventService(elem.$ref, {
+            services: {
+                athlete: "AthleteService",
+                status: "CompetitionStatusService"
+            }
+        });
+        return eventsService.get()
+    })))
+
+    // console.log(rows);
+    // console.log(filteredEvents.length);
+    const outcomes = {
+        "Decision": 0,
+        "Submission": {
+            1: 0,
+            2: 0,
+            3: 0
+        },
+        "TKO": {
+            1: 0,
+            2: 0,
+            3: 0,
+        }
+    };
+    let totalEvents = 0;
+    for (const event of filteredEvents) {
+        for (const competition of event.competitions) {
+            // const competitorOne = competition.competitors.find((elem) => elem.order === 1) as ParsedCompetitionDetail & {
+            //     athlete: ParsedAthleteDetail
+            // };
+            // const competitorTwo = competition.competitors.find((elem) => elem.order === 2) as ParsedCompetitionDetail & {
+            //     athlete: ParsedAthleteDetail
+            // };
+            // const competitorOneOutcomes = rows.filter(row => row["Fighter One"] === competitorOne.athlete.fullName);
+            // const competitorTwoOutcomes = rows.filter(row => row["Fighter Two"] === competitorTwo.athlete.fullName);
+            const {status} = competition as { status: ParsedCompetitionStatus };
+            const isSubmission = status.result.name.includes("submission");
+            const isDecision = status.result.name.includes("decision");
+            const isTKO = ["ko", "tko", "kotko"].includes(status.result.name)
+                || status.result.name.endsWith("-stoppage")
+                || status.result.name.startsWith("ko");
+            // const isNoContest = status.result.name === "no-contest";
+
+            if (isSubmission) {
+                let round = Math.min(status.period, 3);
+                // @ts-ignore
+                outcomes.Submission[round]++;
+                totalEvents++;
+            }
+            if (isTKO) {
+                let round = Math.min(status.period, 3);
+                // @ts-ignore
+                outcomes.TKO[round]++;
+                totalEvents++;
+            }
+            if (isDecision) {
+                outcomes.Decision++;
+                totalEvents++;
+            }
+        }
+    }
+    const frequencies = [
+        {outcome: "Decision", round: null, frequency: outcomes.Decision / totalEvents},
+        {outcome: "Submission", round: 1, frequency: outcomes.Submission[1] / totalEvents},
+        {outcome: "Submission", round: 2, frequency: outcomes.Submission[2] / totalEvents},
+        {outcome: "Submission", round: 3, frequency: outcomes.Submission[3] / totalEvents},
+        {outcome: "TKO", round: 1, frequency: outcomes.TKO[1] / totalEvents},
+        {outcome: "TKO", round: 2, frequency: outcomes.TKO[2] / totalEvents},
+        {outcome: "TKO", round: 3, frequency: outcomes.TKO[3] / totalEvents},
+    ]
+    console.log(outcomes, totalEvents);
+    console.log("Frequencies: ", frequencies);
+    return res.status(200).end();
+})
+
+modelRouter.get("/simulate", async (_req, res) => {
+    await simulateRanks();
+    return res.status(200).end();
+})
 
 export default modelRouter;

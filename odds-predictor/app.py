@@ -60,7 +60,7 @@ def predict():
 
         # Predict
         prediction = model.predict(x_new_prepared)
-        app.logger.info("Prediction: %s", json.dumps(prediction))
+        app.logger.info("Prediction: %s", json.dumps(prediction.tolist()))
         prediction_list = prediction.tolist()
         prediction_obj = {}
         for i in range(len(prediction_list)):

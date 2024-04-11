@@ -1,4 +1,4 @@
-import {InferSchemaType, Schema, model} from "mongoose";
+import mongoose, {InferSchemaType, Schema, model} from "mongoose";
 
 const DraftKingsFighterOdds = new Schema({
     "byTKO": {type: Number, required: true},
@@ -19,5 +19,5 @@ const DraftKingCompetitionOdds =  new Schema({
 })
 
 export type DraftKingsCompetitionOdds = InferSchemaType<typeof DraftKingsCompetitionOddsData>;
-export const DraftKingsCompetitionOddsModel = model("DraftKingsCompetitionOdds", DraftKingCompetitionOdds);
+export const DraftKingsCompetitionOddsModel =  mongoose.models["DraftKingsCompetitionOdds"] ||  model("DraftKingsCompetitionOdds", DraftKingCompetitionOdds);
 

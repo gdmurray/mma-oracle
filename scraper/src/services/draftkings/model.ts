@@ -1,4 +1,4 @@
-import {Schema, model} from "mongoose";
+import mongoose, {Schema, model} from "mongoose";
 
 const Outcome = new Schema({
     providerOutcomeId: {type: String, required: true},
@@ -83,5 +83,5 @@ const DraftKingsSchema = new Schema({
     lastFetched: {type: Date}
 })
 
-export const DraftKingsModel = model("DraftKings", DraftKingsSchema);
+export const DraftKingsModel = mongoose.models["DraftKings"] || model("DraftKings", DraftKingsSchema);
 

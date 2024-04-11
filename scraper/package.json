@@ -17,6 +17,7 @@
     "fuse.js": "^7.0.0",
     "mongoose": "^8.2.4",
     "morgan": "^1.10.0",
+    "neat-csv": "^7.0.0",
     "puppeteer": "^22.6.1",
     "typescript": "^5.4.3",
     "zod": "^3.22.4"

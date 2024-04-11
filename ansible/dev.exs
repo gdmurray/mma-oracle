@@ -23,8 +23,11 @@ config :backend, BackendWeb.Endpoint,
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "tLWoyMZI7ue34rdWQWt1e03p/kW1vgTLnDHxkVWS9ymOuLuX5fqG7toslF7nBik0",
-  watchers: []
+  secret_key_base: "o0NFoc+YIUD9EyhVZ1zboKBpSFbqGH2qamAtJtDLVsdpY9AgLgaRPo6+HF5d97jv",
+  watchers: [
+    esbuild: {Esbuild, :install_and_run, [:backend, ~w(--sourcemap=inline --watch)]},
+    tailwind: {Tailwind, :install_and_run, [:backend, ~w(--watch)]}
+  ]
 
 # ## SSL Support
 #
@@ -49,6 +52,16 @@ config :backend, BackendWeb.Endpoint,
 # configured to run both http and https servers on
 # different ports.
 
+# Watch static and templates for browser reloading.
+config :backend, BackendWeb.Endpoint,
+  live_reload: [
+    patterns: [
+      ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/gettext/.*(po)$",
+      ~r"lib/backend_web/(controllers|live|components)/.*(ex|heex)$"
+    ]
+  ]
+
 # Enable dev routes for dashboard and mailbox
 config :backend, dev_routes: true
 
@@ -61,6 +74,9 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+# Include HEEx debug annotations as HTML comments in rendered markup
+config :phoenix_live_view, :debug_heex_annotations, true
 
 # Disable swoosh api client as it is only required for production adapters.
 config :swoosh, :api_client, false

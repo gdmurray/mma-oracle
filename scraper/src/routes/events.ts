@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import {CalendarService} from "../services/calendar/service";
 import {EventService} from "../services/event/service";
 import {agenda} from "../services/agenda";
+import { PredictionService } from "services/predictions";
 
 const eventsRouter: Router = Router();
 
@@ -92,10 +93,15 @@ eventsRouter.get("/:eventId/competitions/:competitionId/odds", async (req, res) 
     const draftKingsOddsService = new DraftKingsCompetitionOddsService({competition});
     const draftKingsOdds = await draftKingsOddsService.get();
     console.log("DraftKings Odds: ", draftKingsOdds);
-    // const predictionService = new PredictionService(competition);
-    // const predictions = await predictionService.getPredictions();
-    // console.log("Odds Prediction: ", predictions);
-    return res.status(200).end();
+    const predictionService = new PredictionService(competition);
+    try {
+        const predictions = await predictionService.getPredictions();
+        console.log("Odds Prediction: ", predictions);
+        return res.status(200).end();
+    }catch (err){
+        return res.status(500).json({status: "error", message: err.message})
+    }
+
 })
 
 export default eventsRouter;

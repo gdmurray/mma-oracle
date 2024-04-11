@@ -16,7 +16,7 @@ const athleteServiceContext: ServiceContext = {
 
 export class PredictionService {
     public competition: ParsedCompetitionDetail;
-    private apiEndpoint = "http://127.0.0.1:5001/api/predict"
+    private apiEndpoint = "http://127.0.0.1:5555/api/predict"
     private client = apiClient;
 
     constructor(competition: ParsedCompetitionDetail) {
@@ -120,7 +120,6 @@ export class PredictionService {
         const data = await response.json();
         return data;
         console.log("Response: ", response);
-
     }
 
 

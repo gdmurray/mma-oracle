@@ -1,4 +1,4 @@
-import {Schema, model} from "mongoose";
+import mongoose, {Schema, model} from "mongoose";
 
 const athleteRecordsDataSchema = new Schema({
     $ref: {type: String, required: true},
@@ -21,4 +21,4 @@ const athleteRecordsSchema = new Schema({
     lastFetched: {type: Date, required: true},
 });
 
-export const AthleteRecordsModel = model('AthleteRecords', athleteRecordsSchema)
+export const AthleteRecordsModel = mongoose.models["AthleteRecords"] || model('AthleteRecords', athleteRecordsSchema)

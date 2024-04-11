@@ -36,6 +36,8 @@ const CompetitionComponent = ({competition, eventId}: { competition: any; eventI
         const fetchData = async () => {
             try {
                 const response = await axios.get(`http://localhost:3000/events/${eventId}/competitions/${competition.id}`);
+                const oddsResponse = await axios.get(`http://localhost:3000/events/${eventId}/competitions/${competition.id}/odds`);
+                console.log("Odds Response: ", oddsResponse.data);
                 setCompetitionData(response.data.data); // Set data in state
             } catch (error) {
                 console.error('There was an error fetching the data', error);
@@ -115,6 +117,17 @@ export const EventList = () => {
         pastEvents: [],
         futureEvents: [],
     });
+
+    useEffect(() => {
+
+        if(events.activeEvent == null && events.futureEvents.length > 0){
+            let newEvents = {...events};
+            const nextEvent = newEvents.futureEvents.shift();
+            // @ts-ignore
+            newEvents.activeEvent = nextEvent;
+            setEvents(newEvents);
+        }
+    }, [events])
 
     useEffect(() => {
         async function fetchEvents() {

@@ -1,4 +1,4 @@
-import {Schema, model} from "mongoose";
+import mongoose, {Schema, model} from "mongoose";
 
 const OddsLineSchema = new Schema({
     value: {type: Number},
@@ -42,4 +42,4 @@ const CompetitionOddsDataSchema = new Schema({
     lastFetched: {type: Date},
 })
 
-export const CompetitionOddsModel = model("CompetitionOdds", CompetitionOddsDataSchema);
+export const CompetitionOddsModel = mongoose.models["CompetitionOdds"] || model("CompetitionOdds", CompetitionOddsDataSchema);

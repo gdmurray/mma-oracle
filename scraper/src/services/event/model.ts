@@ -1,4 +1,4 @@
-import {model, Schema} from "mongoose";
+import mongoose, {model, Schema} from "mongoose";
 import {CompetitionDataSchema} from "../competition/model";
 
 // Define the Type schema for the nested 'type' object inside 'status'
@@ -37,4 +37,4 @@ const EventDetailSchema = new Schema({
     lastFetched: {type: Date, required: true},
 })
 
-export const EventDetailModel = model('EventDetail', EventDetailSchema)
+export const EventDetailModel = mongoose.models["EventDetail"] || model('EventDetail', EventDetailSchema)

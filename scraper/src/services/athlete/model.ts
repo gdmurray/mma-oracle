@@ -1,4 +1,4 @@
-import {model, Schema} from "mongoose";
+import mongoose, {model, Schema} from "mongoose";
 
 const athleteDetailData = new Schema({
     id: {type: String, required: true},
@@ -55,4 +55,4 @@ const athleteDetailSchema = new Schema({
     lastFetched: {type: Date, required: true}
 });
 
-export const AthleteDetailModel = model('AthleteDetail', athleteDetailSchema)
+export const AthleteDetailModel = mongoose.models["AthleteDetail"] || model('AthleteDetail', athleteDetailSchema)

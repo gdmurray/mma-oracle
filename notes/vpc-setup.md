@@ -84,3 +84,55 @@ git remote add origin [origin repo]
 
 docker swarm init
 ```
+
+nginx config:
+
+```nginx configuration
+server {
+    server_name api.mmaoracle.ca;
+
+    location /core/ {
+	rewrite ^/core/(.*) /$1 break;
+	proxy_pass http://127.0.0.1:4000;
+	proxy_set_header Host $http_host;
+	proxy_set_header X-Real-IP $remote_addr;
+	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /data/ {
+	rewrite ^/data/(.*) /$1 break;
+	proxy_pass http://127.0.0.1:3000;
+	proxy_set_header Host $http_host;
+	proxy_set_header X-Real-IP $remote_addr;
+	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /mongo/ {
+	rewrite ^/mongo/(.*) /$1 break;
+        proxy_pass http://127.0.0.1:8081/;
+        proxy_set_header Host $http_host;
+	proxy_set_header X-Real-IP $remote_addr;
+	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/api.mmaoracle.ca/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/api.mmaoracle.ca/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
+server {
+    if ($host = api.mmaoracle.ca) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    server_name api.mmaoracle.ca;
+    return 404; # managed by Certbot
+}
+```

@@ -42,7 +42,7 @@ export class Service<T, S> {
             console.error(`[${this.serviceName}] Failed to parse data: `, error, jsonData);
             throw new Error(`[${this.serviceName}] Failed to parse data`)
         }
-        return await this.handleServiceContext<T>(data);
+        return data;
     }
 
     public async saveToCache() {
