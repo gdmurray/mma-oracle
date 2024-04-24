@@ -1,0 +1,357 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum CompetitionStatus {
+  PENDING
+  STARTED
+  FINISHED
+}
+
+enum CompetitionMethod {
+  DECISION
+  SUBMISSION
+  TKO
+  DRAW
+}
+
+enum CompetitionType {
+  MMA
+  MUAY_THAI
+}
+
+enum AuthProvider {
+  GOOGLE
+  APPLE
+}
+
+enum CardSegment {
+  MAIN
+  PRELIM
+  EARLY_PRELIM
+  POSTLIM
+}
+
+enum OddsSource {
+  MODEL
+  REAL
+  TAPOLOGY
+}
+
+model User {
+  id       String  @id @default(cuid())
+  name     String?
+  username String? @unique
+  email    String  @unique
+  deviceId String? @unique
+  photo    String?
+
+  rank       Int @default(0)
+  rankPoints Int @default(0)
+
+  password        String?
+  isAdmin         Boolean @default(false)
+  isEmailVerified Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  authCredentials       AuthCredentials[]
+  rankChanges           RankChange[]
+  picks                 Pick[]
+  UserEventOutcome      UserEventOutcome[]
+  LeagueUsers           LeagueUsers[]
+  LeagueUserPoints      LeagueUserPoints[]
+  LeagueUserPointChange LeagueUserPointChange[]
+  LeagueAdmin           League[]
+}
+
+model AuthCredentials {
+  id           String       @id @default(cuid())
+  uid          String?
+  provider     AuthProvider @default(GOOGLE)
+  refreshToken String?
+  tokenExpiry  DateTime?
+  userId       String
+  user         User         @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RankChange {
+  id         String @id @default(cuid())
+  userId     String
+  user       User   @relation(fields: [userId], references: [id])
+  points     Int?
+  xp         Int?
+  percentile Int?
+  event      Event? @relation(fields: [eventId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  eventId String?
+}
+
+model Promotion {
+  id          String @id @default(cuid())
+  title       String
+  description String
+  slug        String @unique @default("ufc")
+  image       String
+  link        String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  events  Event[]
+  leagues League[]
+}
+
+model Event {
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  visible     Boolean    @default(false)
+  image       String?
+  internalId  String?    @unique
+  promotionId String?
+  promotion   Promotion? @relation(fields: [promotionId], references: [id])
+  date        DateTime
+  started     Boolean    @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  RankChanges           RankChange[]
+  UserEventOutcome      UserEventOutcome[]
+  LeagueSeason          LeagueSeason?           @relation(fields: [leagueSeasonId], references: [id])
+  leagueSeasonId        String?
+  LeagueUserPointChange LeagueUserPointChange[]
+  Competition           Competition[]
+}
+
+model Athlete {
+  id         String  @id @default(cuid())
+  internalId String? @unique
+  photo      String?
+  firstName  String?
+  lastName   String?
+  fullName   String?
+  nickname   String?
+  shortName  String?
+
+  country String?
+  flag    String?
+
+  competitionsAsOne Competition[] @relation("CompetitionCompetitorOne")
+  competitionsAsTwo Competition[] @relation("CompetitionCompetitorTwo")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  competitionResults CompetitionResult[]
+  Picks              Pick[]
+  CompetitorOdds     CompetitorOdds[]
+}
+
+model CompetitorOdds {
+  id            String     @id @default(cuid())
+  moneyLine     Float?
+  decision      Float?
+  tko           Float?
+  submission    Float?
+  source        OddsSource @default(MODEL)
+  athleteId     String
+  competitionId String
+
+  athlete     Athlete     @relation(fields: [athleteId], references: [id])
+  competition Competition @relation(fields: [competitionId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Competition {
+  id              String            @id @default(cuid())
+  internalId      String?           @unique
+  status          CompetitionStatus @default(PENDING)
+  live            Boolean           @default(false)
+  locked          Boolean           @default(false)
+  type            CompetitionType   @default(MMA)
+  order           Int               @default(0)
+  segment         CardSegment       @default(MAIN)
+  rounds          Int               @default(3)
+  cancelled       Boolean           @default(false)
+  eventId         String
+  event           Event             @relation(fields: [eventId], references: [id])
+  competitorOneId String
+  competitorTwoId String
+  competitorOne   Athlete           @relation("CompetitionCompetitorOne", fields: [competitorOneId], references: [id])
+  competitorTwo   Athlete           @relation("CompetitionCompetitorTwo", fields: [competitorTwoId], references: [id])
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  result         CompetitionResult?
+  Picks          Pick[]
+  CompetitorOdds CompetitorOdds[]
+}
+
+model CompetitionResult {
+  id            String      @id @default(cuid())
+  internalId    String?     @unique
+  competitionId String      @unique
+  competition   Competition @relation(fields: [competitionId], references: [id])
+  winnerId      String
+  winner        Athlete     @relation(fields: [winnerId], references: [id])
+
+  round             Int?
+  time              String?
+  method            CompetitionMethod?
+  methodDisplayName String?
+  methodDescription String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Pick {
+  id            String             @id @default(cuid())
+  status        CompetitionStatus  @default(PENDING)
+  userId        String
+  user          User               @relation(fields: [userId], references: [id])
+  athleteId     String
+  athlete       Athlete            @relation(fields: [athleteId], references: [id])
+  competitionId String
+  competition   Competition        @relation(fields: [competitionId], references: [id])
+  method        CompetitionMethod?
+  methodRound   Int?
+  doubleDown    Boolean            @default(false)
+  boost         Int                @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  PickOutcome PickOutcome[]
+}
+
+model PickOutcome {
+  id     String  @id @default(cuid())
+  pickId String
+  pick   Pick    @relation(fields: [pickId], references: [id])
+  won    Boolean @default(false)
+  xp     Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserEventOutcome {
+  id      String @id @default(cuid())
+  userId  String
+  user    User   @relation(fields: [userId], references: [id])
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id])
+
+  xp         Int?     @default(0)
+  percentile Float?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([eventId])
+}
+
+model League {
+  id          String      @id @default(cuid())
+  title       String
+  description String?
+  image       String?
+  link        String?
+  public      Boolean     @default(false)
+  adminId     String
+  admin       User        @relation(fields: [adminId], references: [id])
+  promotions  Promotion[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  leagueUsers           LeagueUsers[]
+  LeagueSeason          LeagueSeason[]
+  LeagueUserPoints      LeagueUserPoints[]
+  LeagueUserPointChange LeagueUserPointChange[]
+}
+
+model Season {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  image       String?
+  startDate   DateTime
+  endDate     DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  LeagueSeason LeagueSeason[]
+}
+
+// League Season will have start and end dates, initially taken from the season object, and will allow the admin to modify which events are in the season
+model LeagueSeason {
+  id       String @id @default(cuid())
+  leagueId String
+  league   League @relation(fields: [leagueId], references: [id])
+  seasonId String
+  season   Season @relation(fields: [seasonId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  events Event[]
+}
+
+model LeagueUsers {
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
+  leagueId String
+  league   League @relation(fields: [leagueId], references: [id])
+
+  @@id([userId, leagueId])
+}
+
+model LeagueUserPoints {
+  id       String @id @default(cuid())
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
+  leagueId String
+  league   League @relation(fields: [leagueId], references: [id])
+  points   Int    @default(0)
+  position Int    @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LeagueUserPointChange {
+  id           String @id @default(cuid())
+  userId       String
+  user         User   @relation(fields: [userId], references: [id])
+  leagueId     String
+  league       League @relation(fields: [leagueId], references: [id])
+  pointsChange Int
+  points       Int
+  position     Int
+  eventId      String
+  event        Event  @relation(fields: [eventId], references: [id])
+}

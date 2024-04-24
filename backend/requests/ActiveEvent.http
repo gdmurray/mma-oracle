@@ -1,0 +1,2 @@
+GET {{apiPath}}/events/active
+Content-Type: application/json

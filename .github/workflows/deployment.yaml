@@ -17,10 +17,9 @@ jobs:
     strategy:
       matrix:
         app:
-#          - backend
           - backup
           - odds-predictor
-          - scraper
+          - backend
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -91,6 +90,7 @@ jobs:
             POSTGRES_DB=${{ secrets.POSTGRES_DB }}
             POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
             POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+            DATABASE_URL=postgresql://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@postgres:5432/${{ secrets.POSTGRES_DB }}
             NODE_ENV=production
             FLASK_ENV=production
             AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}

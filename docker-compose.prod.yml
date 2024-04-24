@@ -61,8 +61,8 @@ services:
       restart_policy:
         condition: on-failure
 
-  scraper:
-    image: gdmurray/mma-oracle-scraper:latest
+  backend:
+    image: gdmurray/mma-oracle-backend:latest
     env_file:
       - .env
     ports:
@@ -71,36 +71,37 @@ services:
         protocol: tcp
         mode: ingress
     networks:
+      - default
       - backend
     deploy:
       replicas: 2
       update_config:
         order: start-first
-        parallelism: 2
+        parallelism: 3
         delay: 10s
       restart_policy:
         condition: on-failure
 
-  backend:
-    image: gdmurray/mma-oracle-backend:latest
-    env_file:
-      - .env
-    ports:
-      - published: 4000
-        target: 4000
-        protocol: tcp
-        mode: ingress
-    networks:
-      - default
-      - backend
-    deploy:
-      replicas: 1
-      update_config:
-        order: start-first
-        parallelism: 1
-        delay: 10s
-      restart_policy:
-        condition: on-failure
+#  backend:
+#    image: gdmurray/mma-oracle-backend:latest
+#    env_file:
+#      - .env
+#    ports:
+#      - published: 4000
+#        target: 4000
+#        protocol: tcp
+#        mode: ingress
+#    networks:
+#      - default
+#      - backend
+#    deploy:
+#      replicas: 1
+#      update_config:
+#        order: start-first
+#        parallelism: 1
+#        delay: 10s
+#      restart_policy:
+#        condition: on-failure
 
   odds-predictor:
     image: gdmurray/mma-oracle-odds-predictor:latest
@@ -136,7 +137,7 @@ services:
 
 configs:
   init_mongo_script:
-    file: ./scraper/init-mongo.js
+    file: backend/init-mongo.js
 
 volumes:
   mongodb_data_container:
